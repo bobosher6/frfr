@@ -3,7 +3,7 @@
   <groupId>io.project</groupId>
   <artifactId>SpringDemoBoot</artifactId>
   <versioning>
-    <lastUpdated>20240409051156</lastUpdated>
+    <lastUpdated>20240419051340</lastUpdated>
     <snapshot>
       <localCopy>true</localCopy>
     </snapshot>
@@ -11,7 +11,7 @@
       <snapshotVersion>
         <extension>jar</extension>
         <value>0.0.1-SNAPSHOT</value>
-        <updated>20240409051156</updated>
+        <updated>20240419051340</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>
