@@ -1,1 +1,1 @@
-worker: sh target/bin/SpringDemoTelegramApplication
+worker: sh target/bin/SpringDemoBoot

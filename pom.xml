@@ -60,7 +60,7 @@
 					<assembleDirectory>target</assembleDirectory>
 					<programs>
 						<program>
-							<mainClass>com.home.server.SpringDemoBoot</mainClass>
+							<mainClass>SpringBootTelegramApplication</mainClass>
 							<name>SpringDemoBoot</name>
 						</program>
 					</programs>

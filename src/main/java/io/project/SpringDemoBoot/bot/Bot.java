@@ -25,11 +25,13 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         Message message=update.getMessage();
-        if (message.hasText()){
+        if (update.hasMessage() && message.hasText()){
             Scanner scanner = new Scanner(System.in);
             String text=message.getText();
             SendMessage sendMessage=new SendMessage();
-            sendMessage.setChatId(message.getChatId());
+            sendMessage.setChatId(message.getChatId().toString());
+            sendMessage.setReplyToMessageId(update.getMessage().getMessageId());
+            sendMessage.setText(update.getMessage().getText());
             String msg=null;
             Double a = null;
             if (text.equals("/start")){
@@ -51,13 +53,16 @@ public class Bot extends TelegramLongPollingBot {
             }//kirish chiqish boshlandi
             else if (text.equals("Chiqish")) {
                 msg = "Qaysi chegara bojxona postidan chiqmoqchisiz?";
-                sendMessage.setReplyMarkup(getWay());
+                sendMessage.setReplyMarkup(getWayChiqish());
             } else if (text.equals("\uD83D\uDD19  Qaytish")) {
                 msg = "Tilni sozlash";//kirish
                 sendMessage.setReplyMarkup(langsButton());
             } else if (text.equals("\uD83D\uDE97 Avto")) {
                 msg = "Me'yorni kiriting:";
                 sendMessage.setReplyMarkup(getMeyor());
+            } else if (text.equals("\uD83D\uDE97   Avto")) {
+                msg = "Me'yorni kiriting:";
+                sendMessage.setReplyMarkup(getMeyorChiqish());
             } else if (text.equals("\uD83D\uDE84 Temiryo'l")) {
                 msg = "Me'yorni kiriting:";
                 sendMessage.setReplyMarkup(getMeyorT());
@@ -280,21 +285,21 @@ public class Bot extends TelegramLongPollingBot {
                         "\n" +
                         "Товары, не включенные в категорию товаров, ввозимые физическими лицами для личных нужд\n" +
                         "СПИСОК 1. Двигатель внутреннего сгорания.\n" +
-                        "2. Котлы центрального отопления, отнесенные к субпозиции ТИФ ТН 8403 10 Республики Узбекистан.\n" +
-                        "3. Республика Узбекистан ТИФ ТН 8426 — 8430, 8433 — 8442, 8444 00 — 8449 00 000 0, 8453 — 8464, 8465, 8466, 8468, 8474 — 8480, 8486, 8514, 8530, 8534 00, 8535, 8545 , машины, механизмы, оборудование товарных позиций 8548, 9024, 9027, 9030 и 9031 (кроме газонокосилок, садовых или спортивных газонокосилок, бытовых дисковых пил).\n" +
+                        "2. Котлы центрального отопления, отнесенные к субпозиции ТН ВЕД 8403 10 Республики Узбекистан.\n" +
+                        "3. Республика Узбекистан ТН ВЕД 8426 — 8430, 8433 — 8442, 8444 00 — 8449 00 000 0, 8453 — 8464, 8465, 8466, 8468, 8474 — 8480, 8486, 8514, 8530, 8534 00, 8535, 8545 , машины, механизмы, оборудование товарных позиций 8548, 9024, 9027, 9030 и 9031 (кроме газонокосилок, садовых или спортивных газонокосилок, бытовых дисковых пил).\n" +
                         "4. Солярии для загара на солнце.\n" +
                         "5. Медицинское оборудование и оборудование (за исключением шприцев, игл, катетеров, канюль, аналогичных устройств, средств измерения артериального давления, температуры тела, а также оборудования, необходимого для применения по медицинским инструкциям).\n" +
                         "6. Мебель медицинская, хирургическая, стоматологическая или ветеринарная (за исключением больничных коек с механическими приспособлениями, необходимыми для использования по медицинским инструкциям).\n" +
                         "7. Кресло парикмахерское и аналогичные кресла, их части.\n" +
-                        "8. Аппаратура и оборудование для фотолабораторий, отнесенные к ТИФ ТН 9010 Республики Узбекистан.\n" +
+                        "8. Аппаратура и оборудование для фотолабораторий, отнесенные к ТН ВЕД 9010 Республики Узбекистан.\n" +
                         "9. Оборудование, изделия и модели, предназначенные для демонстрационных целей, классифицированные по ТИФ ТН 9023 00 Республики Узбекистан.\n" +
                         "10. Игровые автоматы, в которых используются монеты, банкноты, банковские карты, жетоны или другие подобные платежные средства.";
             } else if (text.equals("Запреты")) {
                 msg = "❗\uFE0F Направленные на подрыв государственного и общественного строя, нарушение территориальной целостности, политической независимости и государственного суверенитета, пропаганду войны, терроризма, насилия, национального превосходства и религиозной ненависти, расизма и его видов (антисемитизм, фашизм) печатных произведений, рукописей, клише , картины, фотографии, фотопленки, негативы, кино-, видео- и аудиопродукция, граммофонные пластинки, звуковые материалы, а также материалы порнографического характера.\n" +
                         "\n" +
-                        "\uD83D\uDCDD Источник: Указ Президента Республики Узбекистан №ПФ-5286 от 15 декабря 2017 года.";
+                        "\uD83D\uDCDD Источник: Указ Президента Республики Узбекистан №УП-5286 от 15 декабря 2017 года.";
             } else if (text.equals("Импортные стандарты")) {
-                msg = "Нормы отдельных видов товаров, ввозимых физическими лицами в республику, не облагаемых таможенными сборами:\n" +
+                msg = "Нормы ввоза физическими лицами отдельных видов товаров, не подлежащих обложению таможенными платежами:\n" +
                         "\n" +
                         "1. \uD83E\uDD42 Алкогольная продукция, в том числе пиво ----->общее количество не более 2 литров\n" +
                         "\n" +
@@ -310,7 +315,7 @@ public class Bot extends TelegramLongPollingBot {
                         "☑\uFE0F за провоз государственной границы Республики Узбекистан через автомобильные (пешеходные) пункты таможенного пропуска через границу - 300 (триста) долларов США;\n" +
                         "\n" +
                         "\n" +
-                        "\uD83D\uDCDD Источник: Постановление Президента Республики Узбекистан PQ-3512 от 6 февраля 2018 года.";
+                        "\uD83D\uDCDD Источник: Постановление Президента Республики Узбекистан ПП-3512 от 6 февраля 2018 года.";
             } else if (text.equals("Разрешение")) {
                 msg = "Количественные нормы перевозки отдельных товаров, за которые таможенные сборы не взимаются с физических лиц, через автодорожные (пассажирские) пункты пропуска Государственной границы Республики Узбекистан:\n" +
                         "\n" +
@@ -338,7 +343,7 @@ public class Bot extends TelegramLongPollingBot {
                         "\n" +
                         "\n" +
                         "\n" +
-                        "\uD83D\uDCDD Источник: Постановление Суда Министров Республики Узбекистан от 22 июня 2018 года № ВМ-463.";
+                        "\uD83D\uDCDD Источник: Постановление Суда Министров Республики Узбекистан от 22 июня 2018 года № КМ-463.";
             } else if (text.equals("Базовые концепты")) {
                 msg = "Таможенный брокер — юридическое лицо Республики Узбекистан, которое по поручению и от имени декларанта или уполномоченного лица совершает операции по таможенному оформлению на основании договора\n" +
                         "\n" +
@@ -352,7 +357,7 @@ public class Bot extends TelegramLongPollingBot {
                         "\n" +
                         "Валюта Республики Узбекистан (национальная валюта) — денежная единица Республики Узбекистан (сумма)";
             } else if (text.equals("Импортные стандaрты")) {
-                msg = "Нормы отдельных видов товаров, ввозимых физическими лицами в республику, не облагаемых таможенными сборами:\n" +
+                msg = "Нормы ввоза физическими лицами отдельных видов товаров, не подлежащих обложению таможенными платежами:\n" +
                         "\n" +
                         "1. \uD83E\uDD42 Алкогольная продукция, в том числе пиво ----->общее количество не более 2 литров\n" +
                         "\n" +
@@ -368,7 +373,7 @@ public class Bot extends TelegramLongPollingBot {
                         "☑\uFE0F 1000 (одна тысяча) долларов США — при пересечении таможенной границы через железнодорожные и речные пункты пропуска Государственной границы Республики Узбекистан;\n" +
                         "\n" +
                         "\n" +
-                        "\uD83D\uDCDD Источник: Постановление Президента Республики Узбекистан PQ-3512 от 6 февраля 2018 года.";
+                        "\uD83D\uDCDD Источник: Постановление Президента Республики Узбекистан ПП-3512 от 6 февраля 2018 года.";
             } else if (text.equals("Импортные стaндарты")) {
                 msg = "Нормы отдельных видов товаров, ввозимых физическими лицами в республику, не облагаемых таможенными сборами:\n" +
                         "\n" +
@@ -386,7 +391,7 @@ public class Bot extends TelegramLongPollingBot {
                         "☑\uFE0F 2 000 (две тысячи) долларов США — при пересечении таможенной границы через международные аэропорты Республики Узбекистан\n" +
                         "\n" +
                         "\n" +
-                        "\uD83D\uDCDD Источник: Постановление Президента Республики Узбекистан PQ-3512 от 6 февраля 2018 года.";
+                        "\uD83D\uDCDD Источник: Постановление Президента Республики Узбекистан ПП-3512 от 6 февраля 2018 года.";
             } else if (text.equals("\uD83D\uDD19Назад")) {
                 msg = "Назад";
                 sendMessage.setReplyMarkup(getWayRu());
@@ -397,7 +402,7 @@ public class Bot extends TelegramLongPollingBot {
                         "\uD83D\uDCF1 1. Телефонное оборудование, включая мобильные телефоны и устройства с модулем мобильной связи ➖ 2 при каждом пересечении границы (прибытии)\n" +
                         "\n" +
                         "\n" +
-                        "\uD83D\uDCDD Источник: Постановление Суда Министров Республики Узбекистан от 22 июня 2018 года № ВМ-463.";
+                        "\uD83D\uDCDD Источник: Постановление Суда Министров Республики Узбекистан от 22 июня 2018 года № КМ-463.";
             }
 
             ////inglizcha boshlandi...........................................................................
@@ -429,7 +434,7 @@ public class Bot extends TelegramLongPollingBot {
                         "\n" +
                         "\uD83D\uDCB8Individuals must be declared if they import an amount exceeding the equivalent of 100,000,000 (one hundred million) soums!";
             } else if (text.equals("Import standards")) {
-                msg = "Norms of certain types of goods imported by individuals into the republic that are not subject to customs fees:\n" +
+                msg = "Norms of certain types of goods imported by individuals into the republic that are not subject to customs payments:\n" +
                         "\n" +
                         "1. \uD83E\uDD42 Alcoholic products, including beer----->total quantity not more than 2 liters\n" +
                         "\n" +
@@ -445,11 +450,11 @@ public class Bot extends TelegramLongPollingBot {
                         "☑\uFE0F for transportation of the state borders of the Republic of Uzbekistan through road (pedestrian) customs border crossing points - 300 (three hundred) US dollars;\n" +
                         "\n" +
                         "\n" +
-                        "\uD83D\uDCDD Source: Resolution PQ-3512 of the President of the Republic of Uzbekistan dated February 6, 2018";
+                        "\uD83D\uDCDD Source: Resolution PD-3512 of the President of the Republic of Uzbekistan dated February 6, 2018";
             } else if (text.equals("Prohibitions")) {
                 msg = "❗\uFE0F Aimed at undermining the state and social system, violating territorial integrity, political independence and state sovereignty, promoting war, terrorism, violence, national superiority and religious hatred, racism and its types (anti-Semitism, fascism) printed works, manuscripts, clichés, paintings, photographs, photographic films, negatives, film, video and audio products, gramophone records, sound materials, as well as pornographic materials.\n" +
                         "\n" +
-                        "\uD83D\uDCDD Source: Decree of the President of the Republic of Uzbekistan No. PF-5286 dated December 15, 2017.";
+                        "\uD83D\uDCDD Source: Decree of the President of the Republic of Uzbekistan No. PD-5286 dated December 15, 2017.";
             } else if (text.equals("Permission")) {
                 msg = "Quantitative norms for transportation of certain goods for which customs fees are not collected by individuals through highway (passenger) checkpoints of the State border of the Republic of Uzbekistan:\n" +
                         "\n" +
@@ -477,7 +482,7 @@ public class Bot extends TelegramLongPollingBot {
                         "\n" +
                         "\n" +
                         "\n" +
-                        "\uD83D\uDCDD Source: Resolution No. VM-463 of the Court of Ministers of the Republic of Uzbekistan dated June 22, 2018";
+                        "\uD83D\uDCDD Source: Resolution No. CM-463 of the Court of Ministers of the Republic of Uzbekistan dated June 22, 2018";
             } else if (text.equals("Additional information")) {
                 msg = "❕ For non-commercial purposes, for individuals importing goods through the State border crossing points of the Republic of Uzbekistan in hand luggage and tracked luggage, as well as for goods arriving in the name of an individual through international mail and courier shipments, as prescribed by law. a simplified procedure for collecting customs fees will be introduced, which provides for the payment of a single customs fee instead of duty, value added tax and excise tax.\n" +
                         "\n" +
@@ -559,6 +564,122 @@ public class Bot extends TelegramLongPollingBot {
             } else if (text.equals("\uD83D\uDD19Back")) {
                 msg = "Back";
                 sendMessage.setReplyMarkup(getWayEn());
+            } else if (text.equals("\uD83D\uDCB0  Valyuta")) {
+                msg = "Jismoniy shaxslar tomonidan ekvivalenti 100 000 000 (yuz million) so‘mga teng yoki undan oshmaydigan miqdordagi naqd valyuta mablag‘larini O‘zbekiston Respublikasidan tashqariga bojxona nazorati qoidalariga rioya etilgan holda cheklovlarsiz olib chiqiladi. \n" +
+                        "Belgilangan summadan ortiq miqdordagi naqd valyuta mablag‘larining O‘zbekiston Respublikasi hududidan tashqariga olib chiqilishiga yo‘l qo‘yilmaydi, ushbu qoidalarning 6-bandida belgilangan holatlar bundan mustasno. \n" +
+                        " \n" +
+                        " Jismoniy shaxslar tomonidan ekvivalenti 100 000 000 (yuz million) so‘mdan ortiq miqdordagi naqd valyuta mablag‘larini O‘zbekiston Respublikasidan tashqariga olib chiqib ketishga quyidagi holatlarda yo‘l qo‘yiladi:\n" +
+                        " \n" +
+                        "  rezidentlar tomonidan — xorijiy davlatlarga xizmat safariga ketayotgan Hukumat delegatsiyasi a’zolari uchun Vazirlar Mahkamasining farmoyishi asosida;\n" +
+                        " \n" +
+                        "  norezidentlar tomonidan — O‘zbekiston Respublikasiga kirish chog‘ida rasmiylashtirilgan yo‘lovchi bojxona deklaratsiyasi asosida deklaratsiya qilingan mablag‘lar doirasida, shuningdek, respublikada belgilangan tartibda tashkil qilingan xalqaro musobaqalar (tanlovlar, olimpiadalar) sovrindorlari yoki qatnashchilari tomonidan mablag‘larning qonuniyligini tasdiqlovchi hujjatlar asosida.\n" +
+                        " \n" +
+                        "  Bunda norezident jismoniy shaxslar tomonidan O‘zbekiston Respublikasiga kirish chog‘ida to‘ldirilgan yo‘lovchi bojxona deklaratsiyasida ko‘rsatilgan naqd valyuta mablag‘laridan respublika hududida qonunchilik hujjatlarida belgilangan talablarga muvofiq foydalanilgan qoldiq miqdori doirasidagi naqd valyuta mablag‘larini O‘zbekiston Respublikasi hududidan olib chiqishga yo‘l qo‘yiladi. \n" +
+                        " \n" +
+                        "  Ekvivalenti 100 000 000 (yuz million) so‘mdan ortiq bo‘lgan naqd valyuta mablag‘larini olib chiqib ketish uchun asos bo‘lgan hujjatni boshqa shaxslarga berishga yo‘l qo‘yilmaydi.\n" +
+                        " \n" +
+                        "  Jismoniy shaxslar tomonidan naqd valyuta mablag‘larini O‘zbekiston Respublikasidan tashqariga olib chiqib ketish uchun asos bo‘ladigan hujjatlardan bir marotaba foydalanishga yo‘l qo‘yiladi va ushbu hujjatlar kelgusida naqd valyuta mablag‘larini takroran olib chiqib ketish uchun asos hisoblanmaydi.\n" +
+                        "\n" +
+                        "\uD83D\uDCDD Manba: https://lex.uz/docs/-3540203?ONDATE=05.04.2022%2000";
+            } else if (text.equals("Olib  chiqish me'yorlari")) {
+                msg = "Jismoniy shaxslar tomonidan olib ketiladigan ayrim tovarlarning turlari normalari: \n" +
+                        " \n" +
+                        " \n" +
+                        "1.Guruch ---- umumiy og‘irligi 3 kg.dan ko‘p bo‘lmagan \n" +
+                        " \n" +
+                        "2.Non-bulka mahsulotlari ---- umumiy og‘irligi 5 kg.dan ko‘p bo‘lmagan \n" +
+                        " \n" +
+                        "3.Go‘sht va go‘sht oziq-ovqat mahsulotlari ---- umumiy og‘irligi 2 kg.dan ko‘p bo‘lmagan \n" +
+                        " \n" +
+                        "4.Shakar ---- umumiy og‘irligi 2 kg.dan ko‘p bo‘lmagan \n" +
+                        " \n" +
+                        "5.O‘simlik moylari ---- umumiy og‘irligi 2 �g.dan ko‘p bo‘lmagan \n" +
+                        " \n" +
+                        "6.Yangi uzilgan meva-sabzavot mahsulotlari, uzum, poliz ekinlari, dukkakli o‘simliklari hamda quritilgan sabzavot va mevalar ---- umumiy og‘irligi 40 kg.dan ko‘p bo‘lmagan\n" +
+                        "\n" +
+                        "\uD83D\uDCDD Manba:O‘zbekiston Respublikasi Prezidentining 2018-yil 6-fevraldagi PQ-3512-son qarori";
+            } else if (text.equals("Тa'qiqlаr")) {
+                msg = "Jismoniy shaxslar tomonidan olib ketilishi taqiqlangan tovarlar: \n" +
+                        " \n" +
+                        "1. Qimmatbaho metallar           VM 131 23.03.1999 \n" +
+                        " \n" +
+                        "2. Rangli metallar              PF 2559 04.03.2000 \n" +
+                        " \n" +
+                        "3. Yuqori likvidli tovarlar       VM 280 13.08.1996 \n" +
+                        " \n" +
+                        "4. Mineral o’g’itlar              VM 162 29.03.2021 \n" +
+                        " \n" +
+                        "5. Biologik obyektlar              AV 2603 24.07.2014 \n" +
+                        " \n" +
+                        " \n" +
+                        "\uD83D\uDCDD  Manba: Bojxona qo’mitasining 2022-yil 28-fevraldagi ‘’Tashqi iqtisodiy faoliyatda notarif nazoratni \n" +
+                        "tashkil etish to’grisida’’gi 44-sonli buyrug’i.";
+            } else if (text.equals("Ruхsаt")) {
+                msg = "Bojxona deklaratsiyasini taqdim etmagan holda respublikadan jismoniy shaxslar tomonidan olib ketiladigan tovarlarning cheklangan normalari:  \n" +
+                        "5 000 (besh ming) AQSh dollari hisoblanadi.\n" +
+                        "\n" +
+                        "\uD83D\uDCDD Manba:O‘zbekiston Respublikasi Prezidentining 2018-yil 6-fevraldagi PQ-3512-son qarori\n" +
+                        "https://lex.uz/docs/-3551264";
+            } else if (text.equals("Qо'shimchа ma'lumotlar")) {
+                msg = "O‘zbekiston Respublikasi Prezidentining hujjatlari yoki O‘zbekiston Respublikasi Vazirlar Mahkamasining qarorlari asosida beriladigan litsenziyalar bo‘yicha eksport-import qilinadigan maxsus tovarlar: \n" +
+                        " \n" +
+                        "1. Qurol-yarog‘ va harbiy texnika, ularni ishlab chiqarish uchun maxsus butlovchi buyumlar \n" +
+                        " \n" +
+                        "2. Uran va boshqa radioaktiv moddalar, ulardan tayyorlangan buyumlar radioaktiv moddalarining chiqindilari \n" +
+                        " \n" +
+                        "3. Radioaktiv moddalardan foydalanilgan priborlar va asbob-uskunalar \n" +
+                        " \n" +
+                        "4. Qimmatbaho metallar va ulardan tayyorlangan boshqa buyumlar\n" +
+                        " \n" +
+                        "\uD83D\uDCDD  Manba: O‘zbekiston Respublikasi Prezidentining  2017-yil 3-noyabrdagi ‘’MAXSUS TURDAGI TOVARLAR EKSPORTI VA IMPORTINI LITSENZIYALASH, SHUNINGDEK EKSPORT KONTRAKTLARINI RO‘YXATGA OLISH VA IMPORT KONTRAKTLARINI EKSPERTIZADAN O‘TKAZISHNI TARTIBGA SOLISH CHORA-TADBIRLARI TO‘G‘RISIDA’’gi PF-5215 sonli farmoni \n" +
+                        "https://lex.uz/docs/-3470834\n" +
+                        " \n" +
+                        "O‘zbekiston Respublikasi Prezidenti va O‘zbekiston Respublikasi Hukumatining qarorlari asosida eksport qilinadigan buyumlar va mahsulotlar \n" +
+                        " \n" +
+                        "1. Chorva mollari, parranda \n" +
+                        " \n" +
+                        "2. Go‘sht va qo‘shimcha ozuqabop go‘shtli mahsulotlar \n" +
+                        " \n" +
+                        "3. Don: bug‘doy, javdari bug‘doy, arpa, suli, makkajo‘xori, guruch, grechixa \n" +
+                        " \n" +
+                        "4. Un, yorma \n" +
+                        " \n" +
+                        "5. Polietilentereftalat (PET) chiqindilari, parchalari va qirindilari \n" +
+                        " \n" +
+                        "6. Charm xomashyosi (nostandartlari ham), momiq mo‘yna xomashyosi, shu jumladan qorako‘l (nostandartlari ham) \n" +
+                        " \n" +
+                        "7. Titishga yaroqli ipak qurt pillasi, ipak xomashyosi (o‘ralmagan) \n" +
+                        " \n" +
+                        "8. Rangli metall parchalari va chiqindilari \n" +
+                        " \n" +
+                        " \n" +
+                        "\uD83D\uDCDD  Manba: O‘zbekiston Respublikasi Prezidentining  2017-yil 16-dekabrdagi ‘‘TASHQI BOZORLARDA MAHALLIY MAHSULOTLAR RAQOBATDOSHLIGINI TA’MINLASH VA EKSPORTINI RAG‘BATLANTIRISHGA DOIR QO‘SHIMCHA CHORA-TADBIRLARI TO‘G‘RISIDA’’gi PF-5286 sonli farmoni\n" +
+                        "https://lex.uz/docs/-3460651";
+            } else if (text.equals("Asоsiy tushunchаlar")) {
+                msg = "Rezident — O‘zbekiston Respublikasi fuqarolari, shu jumladan xorijdagi O‘zbekiston Respublikasi fuqarolari, O‘zbekiston Respublikasida yashash guvohnomasiga ega bo‘lgan chet el fuqarolari, O‘zbekiston Respublikasida yashash guvohnomasiga ega bo‘lgan fuqaroligi bo‘lmagan shaxslar, O‘zbekiston Respublikasi qonunchiligiga muvofiq tashkil etilgan barcha yuridik shaxslar, shuningdek ularning O‘zbekiston Respublikasida va undan tashqarida joylashgan filiallari va vakolatxonalari, O‘zbekiston Respublikasining diplomatik, savdo va boshqa rasmiy vakolatxonalari, shu jumladan O‘zbekiston Respublikasidan tashqaridagi diplomatik, savdo va boshqa rasmiy vakolatxonalari, qarorgohlari O‘zbekiston Respublikasida joylashgan xalqaro tashkilotlar O‘zbekiston Respublikasi rezidentlaridir; \n" +
+                        " \n" +
+                        "Norezident — Rezident tushunchasi doirasiga kirmaydigan shaxslar O‘zbekiston Respublikasi norezidentlaridir; \n" +
+                        " \n" +
+                        "Bojxona brokeri — bojxona rasmiylashtiruvi bo‘yicha operatsiyalarni deklarant yoki vakolatli shaxsning topshirig‘iga binoan va uning nomidan shartnoma asosida amalga oshiradigan O‘zbekiston Respublikasi yuridik shaxsi; \n" +
+                        " \n" +
+                        "Valyuta kursi — chet el valyutasining O‘zbekiston Respublikasi valyutasiga nisbatan kursi; \n" +
+                        " \n" +
+                        "Valyuta operatsiyalari — valyuta qimmatliklariga bo‘lgan mulk huquqining va boshqa huquqlarning o‘tishi bilan bog‘liq operatsiyalar, valyuta qimmatliklaridan to‘lov vositasi sifatida foydalanish, valyuta qimmatliklarini O‘zbekiston Respublikasiga olib kirish, jo‘natish va o‘tkazish, shuningdek O‘zbekiston Respublikasidan olib chiqish, jo‘natish va o‘tkazish, rezidentlar va norezidentlar o‘rtasida O‘zbekiston Respublikasi valyutasidagi operatsiyalar; \n" +
+                        " \n" +
+                        "Valyuta qimmatliklari — chet el valyutasi, nominali chet el valyutasida ifodalangan qimmatli qog‘ozlar va to‘lov hujjatlari, norezidentlar tomonidan chiqarilgan, nominalga ega bo‘lmagan qimmatli qog‘ozlar, sof quyma oltin; \n" +
+                        " \n" +
+                        "Chet el valyutasi — muomaladagi hamda chet davlat (chet davlatlar guruhlari) hududida naqd to‘lovning qonuniy vositasi bo‘lgan pul belgilari, shuningdek muomaladan chiqarilayotgan yoki muomaladan chiqarilgan, ammo almashtirilishi lozim bo‘lgan pul belgilari, chet davlatlarning (chet davlatlar guruhlarining) pul birliklarida hamda xalqaro pul birliklarida yoki hisob-kitob birliklarida bank hisobvaraqlarida va omonatlarida turgan mablag‘lar; \n" +
+                        " \n" +
+                        "O‘zbekiston Respublikasi valyutasi (milliy valyuta) — O‘zbekiston Respublikasining pul birligi (so‘m)";
+            } else if (text.equals("\uD83D\uDE84   Temiryo'l")) {
+                msg = "Me'yorni kiriting:";
+                sendMessage.setReplyMarkup(getMeyorChiqish());
+            } else if (text.equals("✈️   Aeroport")) {
+                msg = "Me'yorni kiriting:";
+                sendMessage.setReplyMarkup(getMeyorChiqish());
+            } else if (text.equals("\uD83D\uDD19Qауtish")) {
+                msg = "Qaytish:";
+                sendMessage.setReplyMarkup(getPerevodBtn());
             } else{
                 sendMessage.setReplyMarkup(new ReplyKeyboardRemove(false));
                 msg="Xato buyruq";
@@ -663,6 +784,36 @@ public class Bot extends TelegramLongPollingBot {
         row  = new KeyboardRow();
         button = new KeyboardButton();
         button.setText("\uD83D\uDD19  Qаytish");
+        row.add(button);
+
+
+        rows.add(row);
+        markup.setKeyboard(rows);
+        return markup;
+    }
+    public ReplyKeyboardMarkup getWayChiqish(){
+        ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup();
+        markup.setResizeKeyboard(true);
+        markup.setSelective(true);
+
+        List<KeyboardRow> rows=new ArrayList<>();
+        KeyboardRow row=new KeyboardRow();
+        KeyboardButton button=new KeyboardButton();
+
+        button.setText("\uD83D\uDE97   Avto");
+        row.add(button);
+
+        button=new KeyboardButton();
+        button.setText("\uD83D\uDE84   Temiryo'l");
+        row.add(button);
+
+        button=new KeyboardButton();
+        button.setText("✈️   Aeroport");
+        row.add(button);
+        rows.add(row);
+        row  = new KeyboardRow();
+        button = new KeyboardButton();
+        button.setText("\uD83D\uDD19 Qауtish");
         row.add(button);
 
 
@@ -863,6 +1014,52 @@ public class Bot extends TelegramLongPollingBot {
         row  = new KeyboardRow();
         button = new KeyboardButton();
         button.setText("\uD83D\uDD19Qaytish");
+        row.add(button);
+        rows.add(row);
+        markup.setKeyboard(rows);
+        sendMessage.setReplyMarkup(markup);
+        return markup;
+
+    }public ReplyKeyboardMarkup getMeyorChiqish(){
+        SendMessage sendMessage = new SendMessage();
+        ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup();
+        markup.setResizeKeyboard(true);
+        markup.setSelective(true);
+
+        List<KeyboardRow> rows=new ArrayList<>();
+        KeyboardRow row=new KeyboardRow();
+
+        KeyboardButton button=new KeyboardButton();
+        button.setText("\uD83D\uDCB0  Valyuta");
+        row.add(button);
+
+        button=new KeyboardButton();
+        button.setText("Olib  chiqish me'yorlari");
+        row.add(button);
+
+        button=new KeyboardButton();
+        button.setText("Тa'qiqlаr");
+        row.add(button);
+
+        rows.add(row);
+
+        row = new KeyboardRow();
+        button=new KeyboardButton();
+        button.setText("Ruхsаt");
+        row.add(button);
+
+        button=new KeyboardButton();
+        button.setText("Qо'shimchа ma'lumotlar");
+        row.add(button);
+
+        button=new KeyboardButton();
+        button.setText("Asоsiy tushunchаlar");
+        row.add(button);
+
+        rows.add(row);
+        row  = new KeyboardRow();
+        button = new KeyboardButton();
+        button.setText("\uD83D\uDD19Qaytish ");
         row.add(button);
         rows.add(row);
         markup.setKeyboard(rows);
